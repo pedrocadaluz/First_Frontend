@@ -4,67 +4,70 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
 
-#importar caminho
-caminho = Path(__file__).resolve().parent / "data" / "ibov.csv"
+# Obter o diretório do arquivo atual e configurar o caminho
+caminho = Path(_file_).resolve().parent / "data" / "ibov.csv"
 
-st.title('Meu primeiro dashboard')
+# Título e cabeçalho do app
+st.title("Meu primeiro dashboard")
+st.header("Esse é um header")
 
+# Exemplo de Markdown
 st.markdown(
     '''
-    Olá mundo, tudo bem? Vou lhes apresentar um botão, radio, dataframe e um gráfico
+    # 1
+    ## 2
+    ### 3
     '''
 )
 
-# Criar as abas
+# Criação de abas
 abas = st.tabs(["Botão", "Radio", "DataFrame", "Gráfico"])
 
-# Conteúdo da aba Botão
+# Aba do botão
 with abas[0]:
-    st.header("Botão")
-    if st.button('Clique aqui'):
-        st.text('Você apertou o botão')
+    if st.button("Clique aqui"):
+        st.text("Você apertou o botão")
 
-# Conteúdo da aba Radio
+# Aba do radio (com a escolha do time)
 with abas[1]:
-    st.header("Radio")
-    opcao = st.radio(
-        "Escolha a opção:",
-        ('Flamengo', 'Corinthians', 'Palmeiras')
-    )
-
-    if opcao == 'Flamengo':
-        st.info('Você é um urubu')
-    elif opcao == 'Corinthians':
-        st.warning('Você é um campeão')
-    else: 
-        st.error('Você é um perdedor')
-
-# Conteúdo da aba DataFrame
-with abas[2]:
-    st.header("DataFrame")
-    df = pd.read_csv(caminho + "\\ibov.csv")
-    st.dataframe(df)
-
-# Conteúdo da aba Gráfico
-with abas[3]:
-    st.header("Gráfico")
+    opcao = st.radio("Escolha seu time:", ["flamengo", "corinthians", "outro"])
     
-    # Estilo do gráfico
-    plt.style.use('_mpl-gallery')
+    if opcao == "flamengo":
+        st.info("Você é um urubu")
+    elif opcao == "corinthians":
+        st.warning("Você é um campeão")
+    else:
+        st.error("Você é um perdedor")
 
-    # Dados para o gráfico
-    x = 0.5 + np.arange(8)
-    y = [4.8, 5.5, 3.5, 4.6, 6.5, 6.6, 2.6, 3.0]
+# Aba do DataFrame
+with abas[2]:
+    st.subheader("Exibição do DataFrame")
+    
+    # Verificar se o arquivo existe e, em caso afirmativo, exibir o DataFrame
+    if caminho.exists():
+        df = pd.read_csv(caminho)
+        st.dataframe(df)
+    else:
+        st.error("Arquivo não encontrado: " + str(caminho))
 
-    # Criar a figura e o eixo
+# Aba do gráfico
+with abas[3]:
+    # Fixar o estado aleatório para reprodutibilidade
+    np.random.seed(19680801)
+
+    # Dados de exemplo
     fig, ax = plt.subplots()
+    people = ('Tom', 'Dick', 'Harry', 'Slim', 'Jim')
+    y_pos = np.arange(len(people))
+    performance = 3 + 10 * np.random.rand(len(people))
+    error = np.random.rand(len(people))
 
-    # Gráfico de barras
-    ax.bar(x, y, width=1, edgecolor='white', linewidth=0.7)
+    # Criando o gráfico de barras horizontais
+    ax.barh(y_pos, performance, xerr=error, align='center')
+    ax.set_yticks(y_pos, labels=people)
+    ax.invert_yaxis()  # Inverter ordem das labels
+    ax.set_xlabel('Performance')
+    ax.set_title('How fast do you want to go today?')
 
-    # Configurar os eixos
-    ax.set(xlim=(0, 8), xticks=np.arange(1, 8),
-           ylim=(0, 8), yticks=np.arange(1, 8))
-
-    # Mostrar o gráfico no Streamlit
+    # Exibir o gráfico no Streamlit
     st.pyplot(fig)
