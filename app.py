@@ -5,7 +5,7 @@ import numpy as np
 from pathlib import Path
 
 # Obter o diretório do arquivo atual e configurar o caminho
-caminho = Path(_file_).resolve().parent / "data" / "ibov.csv"
+caminho = Path(__file__).resolve().parent / "data" / "ibov.csv"
 
 # Título e cabeçalho do app
 st.title("Meu primeiro dashboard")
