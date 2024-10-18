@@ -2,6 +2,10 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from pathlib import Path
+
+#importar caminho
+caminho = Path(__file__).resolve().parent / "data" / "ibov.csv"
 
 st.title('Meu primeiro dashboard')
 
@@ -38,7 +42,6 @@ with abas[1]:
 # Conteúdo da aba DataFrame
 with abas[2]:
     st.header("DataFrame")
-    caminho = "C:\\pedro_ibmec\\data_science_project\\frontend\\data\\"
     df = pd.read_csv(caminho + "\\ibov.csv")
     st.dataframe(df)
 
